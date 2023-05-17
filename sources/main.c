@@ -24,7 +24,7 @@ int main(int ac, char **av)
 {
     char *options[NB_OPTIONS];
 
-    ft_memset(options, 0, NB_OPTIONS);
+	ft_bzero(options, NB_OPTIONS);
     if (ac < 2)
     {
         help();
@@ -39,7 +39,9 @@ int main(int ac, char **av)
 		}
         else
 		{
-			// call ping
+			ping(av[i]);
 		}
     }
+
+	return 0;
 }
