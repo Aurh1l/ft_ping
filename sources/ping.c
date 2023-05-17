@@ -1,17 +1,23 @@
 #include "../includes/main.h"
 
-//static inline void icmp_request()
-//{
-//	struct icmphdr icmphdr;
-//	ft_bzero(&icmphdr, sizeof(icmphdr));
-//	icmphdr.type = ICMP_ECHO;
-//	icmphdr.code = 0;
-//}
+static inline short checksum(void *buffer, int len)
 
-void ping(char *host)
+static inline void send_icmp_echo()
+{
+	struct icmphdr icmphdr;
+	ft_bzero(&icmphdr, sizeof(icmphdr));
+
+	icmphdr.type = ICMP_ECHO;
+	icmphdr.code = 0;
+	icmphdr.un.echo.id = getpid();
+	icmphdr.un.echo.sequence = 1; // TODO: increment in loop
+}
+
+void ping(const char *host)
 {
 	int sock;
 	struct sockaddr_in sock_addr;
+	struct timeval recv_timeout;
 
 	ft_bzero(&sock_addr, sizeof(sock_addr));
 	sock_addr.sin_family = AF_INET;
@@ -23,13 +29,18 @@ void ping(char *host)
 		exit(1);
 	}
 
-	ft_bzero(host, strlen(host));
-	inet_ntop(AF_INET, &sock_addr,host, INET_ADDRSTRLEN);
-	printf("IP address: %s\n\n", host);
-
 	sock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 
 	if (sock == -1)
+	{
+		log_error(host, strerror(errno));
+		exit(1);
+	}
+
+	recv_timeout.tv_sec = 0;
+	recv_timeout.tv_usec = RECV_TIMEOUT_USEC;
+
+	if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &recv_timeout, sizeof(recv_timeout)) == -1)
 	{
 		log_error(host, strerror(errno));
 		exit(1);

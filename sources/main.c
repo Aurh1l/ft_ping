@@ -31,6 +31,12 @@ int main(int ac, char **av)
         exit(1);
     }
 
+	if (getuid() != 0)
+	{
+		dprintf(STDERR_FILENO, "ERROR: ft_ping must be run as root\n");
+		exit(1);
+	}
+
     for (int i = 1; i < ac; i++)
     {
         if (av[i][0] == '-')
