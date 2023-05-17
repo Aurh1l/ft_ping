@@ -20,6 +20,7 @@ INCS_NAME	= main.h
 SRCS_NAME	 = main.c
 SRCS_NAME	 += utils.c
 SRCS_NAME	 += ping.c
+SRCS_NAME	 += logger.c
 
 #------------------------------------------------------------------------------#
 SRCS		= $(addprefix ${SRCS_DIR},${SRCS_NAME})
