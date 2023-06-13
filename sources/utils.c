@@ -31,3 +31,16 @@ void	ft_bzero(void *s, size_t n)
 {
 	ft_memset(s, 0, n);
 }
+
+char	*ft_strncpy(const char *src, char *dst, size_t len)
+{
+	int i;
+
+	i = 0;
+	while (i < len)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	return dst;
+}
